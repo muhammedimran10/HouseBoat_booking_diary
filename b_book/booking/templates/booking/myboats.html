@@ -1,0 +1,19 @@
+{% extends "booking/base.html" %}
+
+{% block content %}
+    <h1>My Boats</h1>
+    <a class="button bb" href="{% url 'addboat' %}">addboat</a>
+<br><br>
+    {% for boat in boats %}
+    <div class="card">
+        <div class="container">
+            <h3>{{boat}}</h3> <br>
+            {% for owner in boat.own_by.all %}
+               {{owner}}<br>
+            {%endfor%}
+            <a class="button bb" href="{% url 'addowners' boat.id %}">add owners</a>
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

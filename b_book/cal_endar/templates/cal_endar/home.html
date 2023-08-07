@@ -1,0 +1,87 @@
+{% extends "booking/base.html" %}
+{% load custom_filters %}
+{% block content %}
+    <div class='c_and_b'>
+        <div class="card wrapper">
+            <header>
+                
+                <p class="current-date">{{ months }} {{ year }}</p>
+                
+                <div class="icons">
+                        <a href="{% url 'p_month' %}"><</a>
+                        <a href="{% url 'n_month' %}">></a>
+                        
+                        <a href="{% url 'add_booking' %}">+</a>
+                </div>
+            </header>
+            <div class=calendar>
+                <ul class="weeks">
+                    <li>Sun</li>
+                    <li>Mon</li>
+                    <li>Tue</li>
+                    <li>Wed</li>
+                    <li>Thu</li>
+                    <li>Fri</li>
+                    <li>Sat</li>
+                </ul>
+                <ul class="days">
+                    {% for day in month_days %}
+        
+                        {% if day <= first_day|add:1 %}
+                        <li colspan="1"></li>
+                            {% if forloop.counter|divisibleby:7 %}
+                </ul >
+                <ul class="days">
+                            {% endif %}
+        
+                        {%else%}             
+                            {% if day|sub:first_day|sub:1 == s_date and flag == 1%}
+                                                    <li class="activee">{{ day|sub:first_day|sub:1 }}</li>
+                                            {%elif day|sub:first_day|sub:1 == s_date%}
+                                                    <li class="activee">{{ day|sub:first_day|sub:1 }}</li>
+                                            {%else%}
+                                                <li>
+                                                    <a href="{% url 'date_select' day|sub:first_day|sub:1 m year s_boat.id %}">
+                                                        {{ day|sub:first_day|sub:1 }} 
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% if forloop.counter|divisibleby:7 %}
+                    </ul>
+                    <ul class="days">
+                                            {% endif %}
+                                        {% endif %}
+        
+                                    {% endfor %}
+                    </ul>
+        
+            </div>
+        </div>
+
+        <div class="boats">
+            {% for boat in boats %}
+                {% if boat == s_boat %}
+                <div class="card boat checked" onclick="handleCheckboxSelection(this)">
+                    <span>{{boat}}</span>
+                    <input id="name" type="hidden" name="interest" value="{{boat}}">
+                </div>
+                {% else %}
+                <a class="card boat" href="{% url 'date_select' s_date m year boat.id %}">
+                    <div  onclick="handleCheckboxSelection(this)">
+                        <span>{{boat}}</span>
+                        <input id="name" type="hidden" name="interest" value="{{boat}}">
+                    </div>
+                </a>
+                {% endif %}
+            {%endfor%}
+        </div>
+    </div>
+    <div class="card">
+        <h1>Bookings {{s_boat}}</h1>
+
+        <div class="card" style="width: 250px;">
+            {{bookings}}
+            {{bookings.date}}
+        </div>
+    </div>
+{% endblock %}
